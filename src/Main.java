@@ -1,13 +1,12 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.Random;
+import java.util.Scanner;
 
 public class Main {
 
-    static int[] fieldArray;
-    static Random rand = new Random();
+    static int boardLength = 9;
 
+    static Scanner scan = new Scanner(System.in);
 
     public static void main(String[] args) {
 
@@ -17,8 +16,7 @@ public class Main {
     /**
      * Gibt das Spielbrett mit aktueller Stellung am Bildschirm aus.
      */
-    private static void printBoard() {
-
+    private static void printBoard(ArrayList<Integer> board) {
         char[][] gameBoard = {
                 {' ','|',' ','|',' '},
                 {'-','+','-','+','-'},
@@ -26,6 +24,12 @@ public class Main {
                 {'-','+','-','+','-'},
                 {' ','|',' ','|',' '}
         };
+
+        for (int i = 0; i < 5; i = i+2) {
+            for (int j = 0; j < 5; j = i+2) {
+                char[i][j]=
+            }
+        }
 
         for(char[] row : gameBoard){
             for(char c : row){
@@ -36,16 +40,15 @@ public class Main {
     }
 
     /**
-     * Erzeugt auf dem Spielbrett eine zufällige Stellung. Kann zum erzeugen der Startsellung genutzt werden.
+     * Erzeugt auf dem Spielbrett eine zufällige Stellung. Kann zum Erzeugen der Startstellung genutzt werden.
      */
-    private static ArrayList<Integer> initBoardRandom(){
-        int boardLenth = 9;
-        ArrayList<Integer> board = new ArrayList<>();
-        for (int i = 0; i < boardLenth ; i++) {
-            board.add(i);
-        }
-        Collections.shuffle(board);
-        return board;
+    private static ArrayList<ArrayList<Integer>> initBoardRandom(){
+        System.out.println("enter board size N: (NxN)");
+        int inputBoardSize = scan.nextInt();
+        ArrayList<ArrayList<Integer>> gameBoard = new ArrayList<>(inputBoardSize);
+
+        System.out.println(gameBoard);
+        return gameBoard;
     }
 
     /**
@@ -85,7 +88,7 @@ public class Main {
     }
 
     /**
-     * Ermittelt die Position (Index) des leerren Feldes.
+     * Ermittelt die Position (Index) des leeren Feldes.
      */
     private static void getEmptyFieldIndex(){
 
