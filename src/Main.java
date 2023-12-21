@@ -1,142 +1,116 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class Main {
+    private static ArrayList<ArrayList<Integer>> board;
+    private static int size;
+    private static int emptyRow, emptyCol;
+    private static int moveCount;
 
-    static int inputBoardSize;
-
-    static Scanner scan = new Scanner(System.in);
-
-    public static void main(String[] args) {
-        executeGameLogic();
-    }
-
-    private static void executeGameLogic() {
-        ArrayList<ArrayList<Integer>> gameBoard = initBoardRandom();
-        printBoard(gameBoard);
-
-        ArrayList<int[]> neighbors = findNeighborsOfZero(gameBoard);
-
-        System.out.println("Select a neighbor to swap with 0:");
-        for (int i = 0; i < neighbors.size(); i++) {
-            int[] neighbor = neighbors.get(i);
-            int neighborValue = gameBoard.get(neighbor[0]).get(neighbor[1]);
-            System.out.println(i + ": Neighbor at Row " + neighbor[0] + ", Column " + neighbor[1] + " (Value: " + neighborValue + ")");
+    private static void initializeBoard() {
+        board = new ArrayList<>();
+        ArrayList<Integer> numbers = new ArrayList<>();
+        for (int i = 1; i < size * size; i++) {
+            numbers.add(i);
         }
+        numbers.add(null); // Für das leere Feld
+        Collections.shuffle(numbers);
 
-        int choice = scan.nextInt();
-        if (choice >= 0 && choice < neighbors.size()) {
-            swapWithZero(gameBoard, neighbors.get(choice));
-            printBoard(gameBoard);  // Print the updated board
-        } else {
-            System.out.println("Invalid choice");
-        }
-    }
-
-    /**
-     * Prints the current state of the game board.
-     */
-    private static void printBoard(ArrayList<ArrayList<Integer>> gameBoard) {
-        for (ArrayList<Integer> row : gameBoard) {
-            for (int cell : row) {
-                System.out.print(cell + "\t");  // Use tab for better spacing
+        int k = 0;
+        for (int i = 0; i < size; i++) {
+            ArrayList<Integer> row = new ArrayList<>();
+            for (int j = 0; j < size; j++) {
+                row.add(numbers.get(k));
+                if (numbers.get(k) == null) {
+                    emptyRow = i;
+                    emptyCol = j;
+                }
+                k++;
             }
-            System.out.println();  // New line after each row
+            board.add(row);
         }
-        System.out.println();  // Extra line for better separation
+        moveCount = 0;
     }
 
-
-    /**
-     * Erzeugt auf dem Spielbrett eine zufällige Stellung. Kann zum Erzeugen der Startstellung genutzt werden.
-     */
-    private static ArrayList<ArrayList<Integer>> initBoardRandom() {
-        System.out.println("enter board size N: (NxN)");
-        inputBoardSize = scan.nextInt();
-        int counter = 0;
-        ArrayList<ArrayList<Integer>> gameBoard = new ArrayList<>(inputBoardSize);
-
-        for (int i = 0; i < inputBoardSize; i++) {
-            gameBoard.add(new ArrayList<Integer>());
-        }
-
-        for (int i = 0; i < inputBoardSize; i++) {
-            for (int j = 0; j < inputBoardSize; j++) {
-                gameBoard.get(i).add(counter);
-                counter++;
+    private static void printBoard() {
+        for (ArrayList<Integer> row : board) {
+            for (Integer num : row) {
+                if (num == null) {
+                    System.out.print("  ");
+                } else {
+                    System.out.print(num + " ");
+                }
             }
+            System.out.println();
         }
-
-        ArrayList<Integer> flattenedList = new ArrayList<>();
-        for (ArrayList<Integer> row : gameBoard) {
-            flattenedList.addAll(row);
-        }
-
-        // Shuffling the flattened list
-        Collections.shuffle(flattenedList);
-
-        // Reorganizing the shuffled elements back into the 2D ArrayList
-        int index = 0;
-        for (int i = 0; i < inputBoardSize; i++) {
-            for (int j = 0; j < inputBoardSize; j++) {
-                gameBoard.get(i).set(j, flattenedList.get(index));
-                index++;
-            }
-
-        }
-
-
-        Collections.shuffle(gameBoard);
-        for (int i = 0; i < inputBoardSize; i++) {
-            Collections.shuffle(gameBoard.get(i));
-        }
-        System.out.print(gameBoard);
-        System.out.println();
-        System.out.println(gameBoard.get(2).get(1));
-        return gameBoard;
     }
 
-    private static int[] getEmptyFieldIndex(ArrayList<ArrayList<Integer>> gameBoard) {
-        for (int i = 0; i < gameBoard.size(); i++) {
-            for (int j = 0; j < gameBoard.get(i).size(); j++) {
-                if (gameBoard.get(i).get(j) == 0) {
-                    return new int[]{i, j}; // Return the indices as an array
+    private static boolean move(int number) {
+        for (int i = Math.max(0, emptyRow - 1); i <= Math.min(size - 1, emptyRow + 1); i++) {
+            for (int j = Math.max(0, emptyCol - 1); j <= Math.min(size - 1, emptyCol + 1); j++) {
+                if (board.get(i).get(j) != null && board.get(i).get(j) == number) {
+                    if (i == emptyRow || j == emptyCol) {
+                        board.get(emptyRow).set(emptyCol, board.get(i).get(j));
+                        board.get(i).set(j, null);
+                        emptyRow = i;
+                        emptyCol = j;
+                        moveCount++;
+                        return true;
+                    }
                 }
             }
         }
-        return new int[]{-1, -1}; // Return -1, -1 if 0 is not found
+        return false;
     }
 
-    private static ArrayList<int[]> findNeighborsOfZero(ArrayList<ArrayList<Integer>> gameBoard) {
-        ArrayList<int[]> neighbors = new ArrayList<>();
-        int[] positionOfZero = getEmptyFieldIndex(gameBoard);
+    private static boolean isSolved() {
+        int expected = 1;
+        for (int i = 0; i < size; i++) {
+            for (int j = 0; j < size; j++) {
+                if (i == size - 1 && j == size - 1) {
+                    return board.get(i).get(j) == null;
+                }
+                if (board.get(i).get(j) == null || board.get(i).get(j) != expected) {
+                    return false;
+                }
+                expected++;
+            }
+        }
+        return true;
+    }
 
-        int rowIndexOfZero = positionOfZero[0];
-        int colIndexOfZero = positionOfZero[1];
-
-        if (rowIndexOfZero == -1) {
-            return neighbors;
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Bitte gib die Größe des Spielbretts ein (z.B. 3 für ein 3x3-Spielbrett): ");
+        size = scanner.nextInt();
+        while (size < 2) {
+            System.out.println("Die Größe muss mindestens 2 sein. Bitte gib eine gültige Größe ein:");
+            size = scanner.nextInt();
         }
 
-        // Add neighbors with their positions
-        if (rowIndexOfZero > 0) neighbors.add(new int[]{rowIndexOfZero - 1, colIndexOfZero}); // Above
-        if (rowIndexOfZero < gameBoard.size() - 1)
-            neighbors.add(new int[]{rowIndexOfZero + 1, colIndexOfZero}); // Below
-        if (colIndexOfZero > 0) neighbors.add(new int[]{rowIndexOfZero, colIndexOfZero - 1}); // Left
-        if (colIndexOfZero < gameBoard.get(rowIndexOfZero).size() - 1)
-            neighbors.add(new int[]{rowIndexOfZero, colIndexOfZero + 1}); // Right
+        boolean playAgain = true;
+        while (playAgain) {
+            initializeBoard();
+            while (!isSolved()) {
+                printBoard();
+                System.out.println("Spielzug: " + moveCount);
+                System.out.print("Enter number to move: ");
+                int num = scanner.nextInt();
+                if (!move(num)) {
+                    System.out.println("Invalid move");
+                }
+            }
 
-        return neighbors;
+            System.out.println("Puzzle solved in " + moveCount + " moves!");
+            printBoard();
+            System.out.print("Möchtest du noch eine Runde spielen? (ja/nein): ");
+            playAgain = scanner.next().trim().equalsIgnoreCase("ja");
+            if (playAgain) {
+                System.out.println("Starte neues Spiel...");
+            }
+        }
+        scanner.close();
+        System.out.println("Spiel beendet. Danke fürs Spielen!");
     }
-
-    private static void swapWithZero(ArrayList<ArrayList<Integer>> gameBoard, int[] swapPosition) {
-        int[] zeroPosition = getEmptyFieldIndex(gameBoard);
-
-        int temp = gameBoard.get(zeroPosition[0]).get(zeroPosition[1]);
-        gameBoard.get(zeroPosition[0]).set(zeroPosition[1], gameBoard.get(swapPosition[0]).get(swapPosition[1]));
-        gameBoard.get(swapPosition[0]).set(swapPosition[1], temp);
-    }
-
 }
