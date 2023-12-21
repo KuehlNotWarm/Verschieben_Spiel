@@ -1,4 +1,6 @@
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Random;
 
 public class Main {
@@ -36,36 +38,14 @@ public class Main {
     /**
      * Erzeugt auf dem Spielbrett eine zufällige Stellung. Kann zum erzeugen der Startsellung genutzt werden.
      */
-    private static void initBoardRandom(){
-        fieldArray = new int[9];
-        int randomField = rand.nextInt(9);
-        fieldArray[randomField] = 10;
-//        int count = 0;
-//        for(int i : fieldArray){
-//            if(i == 0){
-//                fieldArray[count] = getField();
-//            }
-//        }
-        for (int i = 0; i <fieldArray.length; i++) {
-            if(fieldArray[i] == 0){
-                fieldArray[i] = getField();
-            }
+    private static ArrayList<Integer> initBoardRandom(){
+        int boardLenth = 9;
+        ArrayList<Integer> board = new ArrayList<>();
+        for (int i = 0; i < boardLenth ; i++) {
+            board.add(i);
         }
-        System.out.print(Arrays.toString(fieldArray));
-    }
-
-    /**
-     * Rekursive methode für random Zahl in slot
-     */
-    public static int getField() {
-        int zufall = rand.nextInt(8) + 1;
-        //random Zahl initialisiert
-        for (int e : fieldArray) {
-            if (zufall == e) {
-                getField();
-            }
-        }
-        return zufall;
+        Collections.shuffle(board);
+        return board;
     }
 
     /**
