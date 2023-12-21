@@ -8,6 +8,40 @@ public class Main {
     private static int emptyRow, emptyCol;
     private static int moveCount;
 
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Bitte gib die Größe des Spielbretts ein (z.B. 3 für ein 3x3-Spielbrett): ");
+        size = scanner.nextInt();
+        while (size < 2) {
+            System.out.println("Die Größe muss mindestens 2 sein. Bitte gib eine gültige Größe ein:");
+            size = scanner.nextInt();
+        }
+
+        boolean playAgain = true;
+        while (playAgain) {
+            initializeBoard();
+            while (!isSolved()) {
+                printBoard();
+                System.out.println("Spielzug: " + moveCount);
+                System.out.print("Zahl eingeben, die Bewegt werden soll: ");
+                int num = scanner.nextInt();
+                if (!move(num)) {
+                    System.out.println("Invalider Zug");
+                }
+            }
+
+            System.out.println("Puzzle gelöst in " + moveCount + " Zügen!");
+            printBoard();
+            System.out.print("Möchtest du noch eine Runde spielen? (ja/nein): ");
+            playAgain = scanner.next().trim().equalsIgnoreCase("ja");
+            if (playAgain) {
+                System.out.println("Starte neues Spiel...");
+            }
+        }
+        scanner.close();
+        System.out.println("Spiel beendet. Danke fürs Spielen!");
+    }
+
     private static void initializeBoard() {
         board = new ArrayList<>();
         ArrayList<Integer> numbers = new ArrayList<>();
@@ -80,37 +114,4 @@ public class Main {
         return true;
     }
 
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Bitte gib die Größe des Spielbretts ein (z.B. 3 für ein 3x3-Spielbrett): ");
-        size = scanner.nextInt();
-        while (size < 2) {
-            System.out.println("Die Größe muss mindestens 2 sein. Bitte gib eine gültige Größe ein:");
-            size = scanner.nextInt();
-        }
-
-        boolean playAgain = true;
-        while (playAgain) {
-            initializeBoard();
-            while (!isSolved()) {
-                printBoard();
-                System.out.println("Spielzug: " + moveCount);
-                System.out.print("Zahl eingeben, die Bewegt werden soll: ");
-                int num = scanner.nextInt();
-                if (!move(num)) {
-                    System.out.println("Invalider Zug");
-                }
-            }
-
-            System.out.println("Puzzle gelöst in " + moveCount + " Zügen!");
-            printBoard();
-            System.out.print("Möchtest du noch eine Runde spielen? (ja/nein): ");
-            playAgain = scanner.next().trim().equalsIgnoreCase("ja");
-            if (playAgain) {
-                System.out.println("Starte neues Spiel...");
-            }
-        }
-        scanner.close();
-        System.out.println("Spiel beendet. Danke fürs Spielen!");
-    }
 }
