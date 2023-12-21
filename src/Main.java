@@ -42,10 +42,24 @@ public class Main {
     /**
      * Erzeugt auf dem Spielbrett eine zufällige Stellung. Kann zum Erzeugen der Startstellung genutzt werden.
      */
-    private static ArrayList<ArrayList<Integer>> initBoardRandom(){
+    private static ArrayList<ArrayList<Integer>> initBoardRandom() {
         System.out.println("enter board size N: (NxN)");
         int inputBoardSize = scan.nextInt();
+        int counter = 0;
         ArrayList<ArrayList<Integer>> gameBoard = new ArrayList<>(inputBoardSize);
+
+        for (int i = 0; i < inputBoardSize; i++) {
+            gameBoard.add(new ArrayList<Integer>());
+        }
+        System.out.println();
+        for (int i = 0; i < inputBoardSize; i++) {
+            for (int j = 0; j < inputBoardSize; j++) {
+                gameBoard.get(i).add(counter);
+                counter++;
+            }
+    }
+
+
 
         System.out.println(gameBoard);
         return gameBoard;
