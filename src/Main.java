@@ -51,17 +51,37 @@ public class Main {
         for (int i = 0; i < inputBoardSize; i++) {
             gameBoard.add(new ArrayList<Integer>());
         }
-        System.out.println();
+
         for (int i = 0; i < inputBoardSize; i++) {
             for (int j = 0; j < inputBoardSize; j++) {
                 gameBoard.get(i).add(counter);
                 counter++;
             }
-    }
+        }
+
+        ArrayList<Integer> flattenedList = new ArrayList<>();
+        for (ArrayList<Integer> row : gameBoard) {
+            flattenedList.addAll(row);
+        }
+
+        // Shuffling the flattened list
+        Collections.shuffle(flattenedList);
+
+        // Reorganizing the shuffled elements back into the 2D ArrayList
+        int index = 0;
+        for (int i = 0; i < inputBoardSize; i++) {
+            for (int j = 0; j < inputBoardSize; j++) {
+                gameBoard.get(i).set(j, flattenedList.get(index));
+                index++;
+            }
+        }
 
 
-
-        System.out.println(gameBoard);
+        Collections.shuffle(gameBoard);
+        for (int i = 0; i < inputBoardSize; i++) {
+            Collections.shuffle(gameBoard.get(i));
+        }
+        System.out.print(gameBoard);
         return gameBoard;
     }
 
