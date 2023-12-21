@@ -95,14 +95,14 @@ public class Main {
             while (!isSolved()) {
                 printBoard();
                 System.out.println("Spielzug: " + moveCount);
-                System.out.print("Enter number to move: ");
+                System.out.print("Zahl eingeben, die Bewegt werden soll: ");
                 int num = scanner.nextInt();
                 if (!move(num)) {
-                    System.out.println("Invalid move");
+                    System.out.println("Invalider Zug");
                 }
             }
 
-            System.out.println("Puzzle solved in " + moveCount + " moves!");
+            System.out.println("Puzzle gelöst in " + moveCount + " Zügen!");
             printBoard();
             System.out.print("Möchtest du noch eine Runde spielen? (ja/nein): ");
             playAgain = scanner.next().trim().equalsIgnoreCase("ja");
