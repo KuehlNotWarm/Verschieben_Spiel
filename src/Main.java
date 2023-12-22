@@ -125,6 +125,6 @@ public class Main {
                 expectedNumber++; // erhöht Zahl um 1
             }
         }
-        return true; // Bedingungen sind alle erfüllt und das Spieler hat gewonnen
+        return true; // Bedingungen sind alle erfüllt und der Spieler hat gewonnen
     }
 }
