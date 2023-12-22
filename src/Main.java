@@ -92,39 +92,53 @@ public class Main {
     }
 
     // Versucht, eine Zahl zu bewegen, und gibt zurück, ob der Zug gültig war
-    private static boolean move(int numberToBeMoved) {
+    private static boolean move(int numberToBoMoved) {
+        // Durchlaufen der Zeilen um das leere Feld herum
         int topFromNull = Math.max(0, emptyRow - 1);
         int bottomFromNull = Math.min(inputSizeBoard - 1, emptyRow + 1);
-        for (int row = topFromNull; row <= bottomFromNull; row++) {
+        int leftFromNull = Math.max(0, emptyCol - 1);
+        int rightFromNull = Math.min(inputSizeBoard - 1, emptyCol + 1);
 
-            for (int column = Math.max(0, emptyCol - 1); column <= Math.min(inputSizeBoard - 1, emptyCol + 1); column++) {
-                if (board.get(row).get(column) != null && board.get(row).get(column) == numberToBeMoved) {
-                    if (row == emptyRow || column == emptyCol) {
-                        board.get(emptyRow).set(emptyCol, numberToBeMoved);
-                        board.get(row).set(column, null);
+
+        for (int row = topFromNull; row <= bottomFromNull; row++) {
+            // Durchlaufen der Spalten um das leere Feld herum
+            for (int col = leftFromNull; col <= rightFromNull; col++) {
+                // Überprüfung, ob die aktuelle Zelle die gesuchte Zahl enthält und nicht leer ist
+                if (board.get(row).get(col) != null && board.get(row).get(col) == numberToBoMoved) {
+                    // Überprüfung, ob die Zahl in derselben Zeile oder Spalte wie das leere Feld liegt
+                    if (row == emptyRow || col == emptyCol) {
+                        // Verschieben der Zahl in das leere Feld
+                        board.get(emptyRow).set(emptyCol, numberToBoMoved);
+                        // Aktualisieren der alten Position der Zahl auf 'null' (leeres Feld)
+                        board.get(row).set(col, null);
+                        // Aktualisieren der Position des leeren Feldes
                         emptyRow = row;
-                        emptyCol = column;
+                        emptyCol = col;
+                        // Erhöhen des Spielzugszählers
                         moveCount++;
+                        // Rückgabe von 'true', da der Zug erfolgreich war
                         return true;
                     }
                 }
             }
         }
+        // Rückgabe von 'false', falls kein gültiger Zug möglich war
         return false;
     }
 
     // Überprüft, ob das Puzzle gelöst ist
     private static boolean isSolved() {
         //Überprüft die Anordnung 1-8 + 0
-        int expected = 1; // Aufsteigende Reihenfolge
+        int expectedNumber = 1; // Aufsteigende Reihenfolge, zahlen fangen im Spielbrett bei 1 an
         for (int x = 0; x < inputSizeBoard; x++) {
             for (int y = 0; y < inputSizeBoard; y++) {
-                if ((x != inputSizeBoard - 1 || y != inputSizeBoard - 1) && (board.get(x).get(y) == null || board.get(x).get(y) != expected)) {
+               //prüft, ob es sich nicht um das letzte feld handelt ([2][2]) und ob es entweder null ist, oder nicht der erwarteten Zahl entspricht. Falls doch gibt es false zurück
+                if ((x != inputSizeBoard - 1 || y != inputSizeBoard - 1) && (board.get(x).get(y) == null || board.get(x).get(y) != expectedNumber)) {
                     return false;
                 }
-                expected++;
+                expectedNumber++; // erhöht Zahl um 1
             }
         }
-        return true;
+        return true; // Bedingungen sind alle erfüllt und das Spieler hat gewonnen
     }
 }
