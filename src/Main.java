@@ -4,8 +4,8 @@ import java.util.Collections;
 
 public class Main {
     private static ArrayList<ArrayList<Integer>> board; // Das Spielbrett, repräsentiert als 2D-ArrayList
-    private static int size; // Größe des Spielbretts
-    private static int emptyRow, emptyCol; // Position des leeren Feldes
+    private static int sizeBoard; // Größe des Spielbretts
+    private static int emptyRow, emptyCol; // Position des leeren Feldes (Reihe, Spalte)
     private static int moveCount; // Anzahl der Züge
 
     public static void main(String[] args) {
@@ -13,10 +13,10 @@ public class Main {
 
         // Spielbrettgröße einlesen
         System.out.print("Bitte gib die Größe des Spielbretts ein (z.B. 3 für ein 3x3-Spielbrett): ");
-        size = scanner.nextInt();
-        while (size < 2) {
+        sizeBoard = scanner.nextInt();
+        while (sizeBoard < 2) {
             System.out.println("Die Größe muss mindestens 2 sein. Bitte gib eine gültige Größe ein:");
-            size = scanner.nextInt();
+            sizeBoard = scanner.nextInt();
         }
 
         boolean playAgain = true;
@@ -26,7 +26,7 @@ public class Main {
                 printBoard();
                 System.out.println("Spielzug: " + moveCount);
                 System.out.print("Zahl eingeben, die Bewegt werden soll: ");
-                int num = scanner.nextInt();
+                int num = scanner.nextInt(); //Zahl die getauscht werden soll
                 if (!move(num)) {
                     System.out.println("Invalider Zug");
                 }
@@ -45,22 +45,22 @@ public class Main {
     private static void initializeBoard() {
         board = new ArrayList<>();
         ArrayList<Integer> numbers = new ArrayList<>();
-        for (int i = 1; i < size * size; i++) {
+        for (int i = 1; i < sizeBoard * sizeBoard; i++) {
             numbers.add(i);
         }
         numbers.add(null); // Null repräsentiert das leere Feld
-        Collections.shuffle(numbers);
+        Collections.shuffle(numbers); //mischt das array
 
-        int k = 0;
-        for (int i = 0; i < size; i++) {
+        int positionNumbersArray = 0; //Zählvariable, aktuelle
+        for (int i = 0; i < sizeBoard; i++) {
             ArrayList<Integer> row = new ArrayList<>();
-            for (int j = 0; j < size; j++) {
-                row.add(numbers.get(k));
-                if (numbers.get(k) == null) {
-                    emptyRow = i;
-                    emptyCol = j;
+            for (int j = 0; j < sizeBoard; j++) {
+                row.add(numbers.get(positionNumbersArray));
+                if (numbers.get(positionNumbersArray) == null) {
+                    emptyRow = i; //erster Index des Leeren Feldes (Reihe)
+                    emptyCol = j; //zweiter Index des leeren Feldes (Spalte)
                 }
-                k++;
+                positionNumbersArray++;
             }
             board.add(row);
         }
@@ -79,8 +79,8 @@ public class Main {
 
     // Versucht, eine Zahl zu bewegen, und gibt zurück, ob der Zug gültig war
     private static boolean move(int number) {
-        for (int i = Math.max(0, emptyRow - 1); i <= Math.min(size - 1, emptyRow + 1); i++) {
-            for (int j = Math.max(0, emptyCol - 1); j <= Math.min(size - 1, emptyCol + 1); j++) {
+        for (int i = Math.max(0, emptyRow - 1); i <= Math.min(sizeBoard - 1, emptyRow + 1); i++) {
+            for (int j = Math.max(0, emptyCol - 1); j <= Math.min(sizeBoard - 1, emptyCol + 1); j++) {
                 if (board.get(i).get(j) != null && board.get(i).get(j) == number) {
                     if (i == emptyRow || j == emptyCol) {
                         board.get(emptyRow).set(emptyCol, number);
@@ -99,9 +99,9 @@ public class Main {
     // Überprüft, ob das Puzzle gelöst ist
     private static boolean isSolved() {
         int expected = 1;
-        for (int i = 0; i < size; i++) {
-            for (int j = 0; j < size; j++) {
-                if ((i != size - 1 || j != size - 1) && (board.get(i).get(j) == null || board.get(i).get(j) != expected)) {
+        for (int i = 0; i < sizeBoard; i++) {
+            for (int j = 0; j < sizeBoard; j++) {
+                if ((i != sizeBoard - 1 || j != sizeBoard - 1) && (board.get(i).get(j) == null || board.get(i).get(j) != expected)) {
                     return false;
                 }
                 expected++;
