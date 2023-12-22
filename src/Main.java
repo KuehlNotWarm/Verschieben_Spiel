@@ -5,7 +5,7 @@ import java.util.Collections;
 public class Main {
     private static ArrayList<ArrayList<Integer>> board; // Das Spielbrett, repräsentiert als 2D-ArrayList
     private static int inputSizeBoard; // Größe des Spielbretts
-    private static int emptyRow, emptyCol; // Position des leeren Feldes (Reihe, Spalte)
+    private static int nullX, nullY; // Position des leeren Feldes (Reihe, Spalte)
     private static int moveCount; // Anzahl der Züge
 
     public static void main(String[] args) {
@@ -69,8 +69,8 @@ public class Main {
             for (int y = 0; y < inputSizeBoard; y++) {
                 row.add(numbersArray.get(indexNumbersArray)); // Fügt ArrayList zahlen aus numbersArray hinzu
                 if (numbersArray.get(indexNumbersArray) == null) {
-                    emptyRow = x; // erster Index des Leeren Feldes (Reihe)
-                    emptyCol = y; // zweiter Index des leeren Feldes (Spalte)
+                    nullX = x; // erster Index des Leeren Feldes (Reihe)
+                    nullY = y; // zweiter Index des leeren Feldes (Spalte)
                 }
                 indexNumbersArray++;
             }
@@ -94,26 +94,26 @@ public class Main {
     // Versucht, eine Zahl zu bewegen, und gibt zurück, ob der Zug gültig war
     private static boolean move(int numberToBoMoved) {
         // Durchlaufen der Zeilen um das leere Feld herum
-        int topFromNull = Math.max(0, emptyRow - 1);
-        int bottomFromNull = Math.min(inputSizeBoard - 1, emptyRow + 1);
-        int leftFromNull = Math.max(0, emptyCol - 1);
-        int rightFromNull = Math.min(inputSizeBoard - 1, emptyCol + 1);
+        int topFromNull = Math.max(0, nullX - 1);
+        int bottomFromNull = Math.min(inputSizeBoard - 1, nullX + 1);
+        int leftFromNull = Math.max(0, nullY - 1);
+        int rightFromNull = Math.min(inputSizeBoard - 1, nullY + 1);
 
 
-        for (int row = topFromNull; row <= bottomFromNull; row++) {
+        for (int x = topFromNull; x <= bottomFromNull; x++) {
             // Durchlaufen der Spalten um das leere Feld herum
-            for (int col = leftFromNull; col <= rightFromNull; col++) {
+            for (int y = leftFromNull; y <= rightFromNull; y++) {
                 // Überprüfung, ob die aktuelle Zelle die gesuchte Zahl enthält und nicht leer ist
-                if (board.get(row).get(col) != null && board.get(row).get(col) == numberToBoMoved) {
+                if (board.get(x).get(y) != null && board.get(x).get(y) == numberToBoMoved) {
                     // Überprüfung, ob die Zahl in derselben Zeile oder Spalte wie das leere Feld liegt
-                    if (row == emptyRow || col == emptyCol) {
+                    if (x == nullX || y == nullY) {
                         // Verschieben der Zahl in das leere Feld
-                        board.get(emptyRow).set(emptyCol, numberToBoMoved);
+                        board.get(nullX).set(nullY, numberToBoMoved);
                         // Aktualisieren der alten Position der Zahl auf 'null' (leeres Feld)
-                        board.get(row).set(col, null);
+                        board.get(x).set(y, null);
                         // Aktualisieren der Position des leeren Feldes
-                        emptyRow = row;
-                        emptyCol = col;
+                        nullX = x;
+                        nullY = y;
                         // Erhöhen des Spielzugszählers
                         moveCount++;
                         // Rückgabe von 'true', da der Zug erfolgreich war
