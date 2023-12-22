@@ -44,27 +44,27 @@ public class Main {
     // Initialisiert das Spielbrett mit zufälligen Zahlen und einem leeren Feld
     private static void initializeBoard() {
         board = new ArrayList<>();
-        ArrayList<Integer> numbers = new ArrayList<>();
+        ArrayList<Integer> numbersArray = new ArrayList<>();
         for (int i = 1; i < sizeBoard * sizeBoard; i++) {
-            numbers.add(i);
+            numbersArray.add(i);
         }
-        numbers.add(null); // Null repräsentiert das leere Feld
-        Collections.shuffle(numbers); //mischt das array
+        numbersArray.add(null); // Null repräsentiert das leere Feld
+        Collections.shuffle(numbersArray); //mischt das array
 
-        int positionNumbersArray = 0; //Zählvariable, aktuelle
+        int positionNumbersArray = 0; // Zählvariable, aktuelle
         for (int i = 0; i < sizeBoard; i++) {
             ArrayList<Integer> row = new ArrayList<>();
             for (int j = 0; j < sizeBoard; j++) {
-                row.add(numbers.get(positionNumbersArray));
-                if (numbers.get(positionNumbersArray) == null) {
-                    emptyRow = i; //erster Index des Leeren Feldes (Reihe)
-                    emptyCol = j; //zweiter Index des leeren Feldes (Spalte)
+                row.add(numbersArray.get(positionNumbersArray)); // Fügt dem reihen ArrayList zahlen aus numbersArray hinzu
+                if (numbersArray.get(positionNumbersArray) == null) {
+                    emptyRow = i; // erster Index des Leeren Feldes (Reihe)
+                    emptyCol = j; // zweiter Index des leeren Feldes (Spalte)
                 }
                 positionNumbersArray++;
             }
-            board.add(row);
+            board.add(row); // fügt dem board die jeweilige Reihe (i) hinzu
         }
-        moveCount = 0;
+        moveCount = 0; //setzt den Spielzug zurück
     }
 
     // Gibt das Spielbrett aus
