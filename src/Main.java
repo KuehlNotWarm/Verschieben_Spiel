@@ -14,6 +14,8 @@ public class Main {
         // Spielbrettgröße einlesen
         System.out.print("Bitte gib die Größe des Spielbretts ein (z.B. 3 für ein 3x3-Spielbrett): ");
         sizeBoard = scanner.nextInt();
+
+        // Prüft ob Eingabe mind. 3 ist
         while (sizeBoard < 2) {
             System.out.println("Die Größe muss mindestens 2 sein. Bitte gib eine gültige Größe ein:");
             sizeBoard = scanner.nextInt();
@@ -25,10 +27,10 @@ public class Main {
             while (!isSolved()) { // Wiederholt, bis das Puzzle gelöst ist
                 printBoard();
                 System.out.println("Spielzug: " + moveCount);
-                System.out.print("Zahl eingeben, die Bewegt werden soll: ");
-                int num = scanner.nextInt(); //Zahl die getauscht werden soll
-                if (!move(num)) {
-                    System.out.println("Invalider Zug");
+                System.out.print("Geben Sie die Zahl ein, die getauscht werden soll: ");
+                int numberToBeMoved = scanner.nextInt(); //Zahl die getauscht werden soll
+                if (!move(numberToBeMoved)) {
+                    System.out.println("! ! ! INVALIDER ZUG ! ! !");
                 }
             }
 
